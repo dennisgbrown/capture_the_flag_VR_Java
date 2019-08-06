@@ -1,0 +1,131 @@
+#################
+#
+# Collaborative VE with Enhanced Awareness
+#
+# Dennis Brown
+# 
+#################
+
+PROJ_DIR = F:\MS
+
+
+all: vepackage flagpackage nmistuff
+
+allclean: veclean flagclean nmiclean
+
+
+#################
+# VE PACKAGE
+#################
+
+PACKAGE_DIR = $(PROJ_DIR)/ve
+CONMAN_DIR = $(PACKAGE_DIR)/conman
+VOBJECT_DIR = $(PACKAGE_DIR)/vobject
+TYPES_DIR = $(PACKAGE_DIR)/types
+
+vepackage: ConMan VObject Types
+
+veclean:
+	rm -f $(CONMAN_DIR)/*.class \
+	rm -f $(VOBJECT_DIR)/*.class \
+	rm -f $(TYPES_DIR)/*.class
+
+
+ConMan: ConMan.class ConManImpl.class ConManStubs
+
+ConMan.class: $(CONMAN_DIR)/ConMan.java 
+	javac -d $(PROJ_DIR) $(CONMAN_DIR)/ConMan.java
+
+ConManImpl.class: $(CONMAN_DIR)/ConManImpl.java
+	javac -d $(PROJ_DIR) $(CONMAN_DIR)/ConManImpl.java
+
+ConManStubs: ConMan.class ConManImpl.class 
+	rmic -d $(PROJ_DIR) ve.conman.ConManImpl
+
+
+VObject: VObject.class BaseObject.class VObjectStubs AwareObject.class UserObject.class
+
+VObject.class: $(VOBJECT_DIR)/VObject.java
+	javac -d $(PROJ_DIR) $(VOBJECT_DIR)/VObject.java
+
+BaseObject.class: $(VOBJECT_DIR)/BaseObject.java
+	javac -d $(PROJ_DIR) $(VOBJECT_DIR)/BaseObject.java
+
+VObjectStubs: VObject.class BaseObject.class 
+	rmic -d $(PROJ_DIR) ve.vobject.BaseObject
+
+AwareObject.class: $(VOBJECT_DIR)/AwareObject.java
+	javac -d $(PROJ_DIR) $(VOBJECT_DIR)/AwareObject.java
+
+UserObject.class: $(VOBJECT_DIR)/UserObject.java
+	javac -d $(PROJ_DIR) $(VOBJECT_DIR)/UserObject.java
+
+
+Types: ThreeVec.class PolyObject.class Vertex.class Triangle.class
+
+ThreeVec.class: $(TYPES_DIR)/ThreeVec.java
+	javac -d $(PROJ_DIR) $(TYPES_DIR)/ThreeVec.java
+
+PolyObject.class: $(TYPES_DIR)/PolyObject.java
+	javac -d $(PROJ_DIR) $(TYPES_DIR)/PolyObject.java
+
+Vertex.class: $(TYPES_DIR)/Vertex.java
+	javac -d $(PROJ_DIR) $(TYPES_DIR)/Vertex.java
+
+Triangle.class: $(TYPES_DIR)/Triangle.java
+	javac -d $(PROJ_DIR) $(TYPES_DIR)/Triangle.java
+
+
+############################
+# CAPTURE-THE-FLAG PACKAGE
+############################
+
+FLAG_PACKAGE_DIR = $(PROJ_DIR)/capflag
+
+flagpackage: Player Maze Flag
+
+flagclean:
+	rm -f $(PROJ_DIR)/capflag/*.class
+
+
+Player: Player.class
+
+Player.class: $(FLAG_PACKAGE_DIR)/Player.java 
+	javac -d $(PROJ_DIR) $(FLAG_PACKAGE_DIR)/Player.java
+
+Maze: Maze.class
+
+Maze.class: $(FLAG_PACKAGE_DIR)/Maze.java 
+	javac -d $(PROJ_DIR) $(FLAG_PACKAGE_DIR)/Maze.java
+
+Flag: Flag.class
+
+Flag.class: $(FLAG_PACKAGE_DIR)/Flag.java 
+	javac -d $(PROJ_DIR) $(FLAG_PACKAGE_DIR)/Flag.java
+
+
+#################
+# NMI LIBRARIES
+#################
+
+nmistuff: VCJava
+
+nmiclean: 
+	cd VCJava; make clean; cd ..
+
+
+VCJava: VCJava/libVCJava.so
+
+VCJava/libVCJava.so: 
+	cd VCJava; make VCJava
+
+VCJavaclean: 
+	cd VCJava; make clean; cd ..
+
+
+
+
+
+
+
+

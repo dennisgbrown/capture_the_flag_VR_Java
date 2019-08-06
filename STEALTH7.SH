@@ -1,0 +1,1 @@
+java capflag.Player -serverName $1 -position 122.5 135.0 102.5 -lookat 122.5 102.0 102.5 -VUP 0.0 0.0 1.0 -focusRadius 100000.0 -nimbusRadius -100000.0 -geomFile capflag/models/glider.tri -objName "Stealth Observer"

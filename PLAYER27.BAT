@@ -1,0 +1,1 @@
+java capflag.Player -serverName %1 -position 132.5 102.0 92.5 -lookat 122.5 102.0 92.5 -VUP 0.0 1.0 0.0 -focusRadius 10.0 -nimbusRadius 10.0 -geomFile capflag/models/playerblue.tri -objName "Player 2"
